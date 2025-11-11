@@ -70,6 +70,81 @@
             color: var(--secondary-color);
             fill: var(--secondary-color);
         }
+
+        /* Animation Styles for Live Interactivity */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .animate-slideDown {
+            animation: slideDown 0.3s ease-in-out;
+        }
+
+        .animate-pulse-subtle {
+            animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        button:active::after {
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            to {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" onscroll="updateScrollProgress()">
@@ -126,18 +201,98 @@
 
         <!-- Featured Articles Section -->
         <section id="articles" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">Recent Reviews & Insights</h2>
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">Recent Reviews & Insights</h2>
+                <span id="article-count" class="bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 px-3 py-1 rounded-full text-sm font-bold">0</span>
+            </div>
+            
+            <!-- Live Search Bar for Articles -->
+            <div class="mb-6">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-3 w-5 h-5 text-gray-400"></i>
+                    <input 
+                        type="text" 
+                        id="article-search" 
+                        placeholder="🔍 Search articles by title or category..."
+                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+                        oninput="filterArticles()"
+                    />
+                    <span id="search-results" class="absolute right-3 top-2 text-xs text-gray-500 dark:text-slate-400"></span>
+                </div>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="filterByCategory('All')" class="category-filter px-4 py-2 rounded-full text-sm font-semibold transition duration-200 active bg-teal-600 text-white" data-category="All">
+                    All
+                </button>
+                <button onclick="filterByCategory('AI Software')" class="category-filter px-4 py-2 rounded-full text-sm font-semibold transition duration-200 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:ring-2 ring-teal-400" data-category="AI Software">
+                    AI Software
+                </button>
+                <button onclick="filterByCategory('Finance')" class="category-filter px-4 py-2 rounded-full text-sm font-semibold transition duration-200 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:ring-2 ring-teal-400" data-category="Finance">
+                    Finance
+                </button>
+                <button onclick="filterByCategory('Education')" class="category-filter px-4 py-2 rounded-full text-sm font-semibold transition duration-200 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:ring-2 ring-teal-400" data-category="Education">
+                    Education
+                </button>
+            </div>
+
             <div id="article-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Articles will be injected here by JavaScript -->
+            </div>
+            
+            <div id="no-articles-message" class="text-center py-8 text-gray-500 dark:text-slate-400 hidden">
+                <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                <p class="text-lg">No articles found. Try a different search.</p>
             </div>
         </section>
 
         <!-- Top Affiliate Tools Section (The Money Maker - SaaS) -->
         <section id="tools" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">The Essential SaaS Toolkit (Recurring Income)</h2>
-            <p class="text-lg text-gray-600 dark:text-slate-400 mb-8 max-w-4xl">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">The Essential SaaS Toolkit (Recurring Income)</h2>
+                <span id="tool-count" class="bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 px-3 py-1 rounded-full text-sm font-bold">0</span>
+            </div>
+            <p class="text-lg text-gray-600 dark:text-slate-400 mb-6 max-w-4xl">
                 These software products are the foundation for long-term passive income streams.
             </p>
+
+            <!-- Live Sort & Filter Controls -->
+            <div class="mb-6 flex flex-wrap gap-4">
+                <div class="relative">
+                    <i data-lucide="filter" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                    <select id="sort-tools" onchange="sortTools()" class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option value="rating">Sort by Rating</option>
+                        <option value="name">Sort by Name</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+                <button onclick="toggleToolDetails()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:ring-2 ring-teal-400 transition font-semibold text-sm">
+                    <i data-lucide="eye" class="w-4 h-4 inline mr-2"></i>
+                    <span id="toggle-details-text">Show Details</span>
+                </button>
+            </div>
+
+            <!-- Live Tools Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-teal-50 dark:bg-teal-900/30 rounded-lg p-4 border border-teal-200 dark:border-teal-700">
+                    <p class="text-sm text-gray-600 dark:text-slate-400">Total Tools</p>
+                    <p id="stats-total" class="text-2xl font-bold primary-text">0</p>
+                </div>
+                <div class="bg-teal-50 dark:bg-teal-900/30 rounded-lg p-4 border border-teal-200 dark:border-teal-700">
+                    <p class="text-sm text-gray-600 dark:text-slate-400">Avg Rating</p>
+                    <p id="stats-avg-rating" class="text-2xl font-bold primary-text">0</p>
+                </div>
+                <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-4 border border-yellow-200 dark:border-yellow-700">
+                    <p class="text-sm text-gray-600 dark:text-slate-400">Top Rated</p>
+                    <p id="stats-top-rated" class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">0</p>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                    <p class="text-sm text-gray-600 dark:text-slate-400">Clicked Today</p>
+                    <p id="stats-clicked" class="text-2xl font-bold text-green-600 dark:text-green-400">0</p>
+                </div>
+            </div>
+
             <div id="tool-list" class="space-y-8">
                 <!-- SaaS Tools will be injected here by JavaScript -->
             </div>
@@ -182,6 +337,12 @@
     </footer>
 
     <script>
+        // Global state for interactivity
+        let clickStats = 0;
+        let currentArticleFilter = 'All';
+        let toolDetailsVisible = false;
+        let sortToolsBy = 'rating';
+
         // Load icons and start rendering after the HTML is loaded
         window.onload = function() {
             lucide.createIcons();
@@ -189,8 +350,12 @@
             renderArticles();
             renderTools();
             renderAmazonPicks();
+            updateToolStats();
+            updateArticleCount();
             // Start listening for scroll immediately
             updateScrollProgress(); 
+            // Setup keyboard shortcuts
+            setupKeyboardShortcuts();
         };
 
         // --- THEME & INTERACTIVE FUNCTIONS ---
@@ -239,10 +404,11 @@
         // Simulates clicking the affiliate link and shows a thank you message
         function handleAffiliateClick(toolName, link) {
             console.log(`Affiliate Clicked: ${toolName}. Redirecting to: ${link}`);
+            trackAffiliateClick();
 
             // In a real app, use: window.open(link, '_blank'); 
 
-            alertMessage(`Redirecting to ${toolName} site... Thank you for supporting us!`);
+            alertMessage(`✨ Redirecting to ${toolName} site... Thank you for supporting us!`);
         }
 
         // Copies the raw affiliate link to the clipboard and shows a modal
@@ -276,6 +442,139 @@
 
             modal.classList.remove('hidden');
             setTimeout(hideModal, 2500);
+        }
+        
+        // --- LIVE INTERACTIVITY FUNCTIONS ---
+
+        // Setup keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+K or Cmd+K to focus search
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('article-search').focus();
+                }
+                // Ctrl+F to focus search with feedback
+                if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    e.preventDefault();
+                    document.getElementById('article-search').focus();
+                    alertMessage('💡 Tip: Use Ctrl+K for quick search!');
+                }
+            });
+        }
+
+        // Live Article Search & Filter
+        function filterArticles() {
+            const searchTerm = document.getElementById('article-search').value.toLowerCase();
+            const articleCards = document.querySelectorAll('#article-list article');
+            let visibleCount = 0;
+
+            articleCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const category = card.querySelector('.uppercase').textContent.toLowerCase();
+                const snippet = card.querySelector('p').textContent.toLowerCase();
+                
+                const matches = title.includes(searchTerm) || category.includes(searchTerm) || snippet.includes(searchTerm);
+                
+                if (matches && (currentArticleFilter === 'All' || category.includes(currentArticleFilter.toLowerCase()))) {
+                    card.style.display = 'block';
+                    card.classList.add('animate-fadeIn');
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show/hide no results message
+            const noMessage = document.getElementById('no-articles-message');
+            if (visibleCount === 0 && searchTerm) {
+                noMessage.classList.remove('hidden');
+            } else {
+                noMessage.classList.add('hidden');
+            }
+
+            // Update search results counter
+            const resultSpan = document.getElementById('search-results');
+            if (searchTerm) {
+                resultSpan.textContent = `${visibleCount} results`;
+            } else {
+                resultSpan.textContent = '';
+            }
+        }
+
+        // Filter articles by category
+        function filterByCategory(category) {
+            currentArticleFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.category-filter').forEach(btn => {
+                btn.classList.remove('active', 'bg-teal-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-slate-300');
+            });
+            
+            event.target.classList.remove('bg-gray-200', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-slate-300');
+            event.target.classList.add('active', 'bg-teal-600', 'text-white');
+
+            filterArticles();
+        }
+
+        // Update article count display
+        function updateArticleCount() {
+            const count = articles.length;
+            document.getElementById('article-count').textContent = count;
+        }
+
+        // Sort tools by various criteria
+        function sortTools() {
+            const sortValue = document.getElementById('sort-tools').value;
+            sortToolsBy = sortValue;
+
+            let sortedTools = [...tools];
+
+            if (sortValue === 'rating') {
+                sortedTools.sort((a, b) => b.rating - a.rating);
+            } else if (sortValue === 'name') {
+                sortedTools.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortValue === 'newest') {
+                sortedTools.reverse();
+            }
+
+            // Update the tools array and re-render
+            tools.length = 0;
+            tools.push(...sortedTools);
+            renderTools();
+        }
+
+        // Toggle detailed view for tools
+        function toggleToolDetails() {
+            toolDetailsVisible = !toolDetailsVisible;
+            const toggleText = document.getElementById('toggle-details-text');
+            
+            if (toolDetailsVisible) {
+                toggleText.textContent = 'Hide Details';
+                document.querySelectorAll('.tool-pros-cons').forEach(el => el.classList.remove('hidden'));
+            } else {
+                toggleText.textContent = 'Show Details';
+                document.querySelectorAll('.tool-pros-cons').forEach(el => el.classList.add('hidden'));
+            }
+        }
+
+        // Update tool statistics in real-time
+        function updateToolStats() {
+            const totalTools = tools.length;
+            const avgRating = (tools.reduce((sum, t) => sum + t.rating, 0) / totalTools).toFixed(1);
+            const topRated = Math.max(...tools.map(t => t.rating));
+
+            document.getElementById('stats-total').textContent = totalTools;
+            document.getElementById('stats-avg-rating').textContent = avgRating;
+            document.getElementById('stats-top-rated').textContent = topRated;
+            document.getElementById('stats-clicked').textContent = clickStats;
+        }
+
+        // Track affiliate clicks
+        function trackAffiliateClick() {
+            clickStats++;
+            updateToolStats();
         }
         
         // Helper function for star ratings (Amazon flow)
@@ -429,12 +728,18 @@
         function renderTools() {
             const container = document.getElementById('tool-list');
             container.innerHTML = tools.map(tool => `
-                <div class="card p-6 sm:p-8 rounded-xl shadow-2xl border border-teal-300/50 dark:border-teal-700 flex flex-col lg:flex-row items-start lg:items-center justify-between transition duration-500 hover:ring-4 ring-teal-400/50 transform hover:scale-[1.005]">
+                <div class="card p-6 sm:p-8 rounded-xl shadow-2xl border border-teal-300/50 dark:border-teal-700 flex flex-col lg:flex-row items-start lg:items-center justify-between transition duration-500 hover:ring-4 ring-teal-400/50 transform hover:scale-[1.005] group">
                     
+                    <!-- Live Status Badge -->
+                    <div class="absolute top-4 right-4 bg-green-500/20 text-green-700 dark:text-green-300 px-3 py-1 rounded-full text-xs font-bold flex items-center animate-pulse">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                        LIVE
+                    </div>
+
                     <!-- Product Info & Comparison (Amazon-Style) -->
                     <div class="lg:w-3/5 mb-6 lg:mb-0 lg:pr-8">
                         <div class="flex items-center mb-2">
-                            <i data-lucide="${tool.icon}" class="w-7 h-7 primary-text mr-3"></i>
+                            <i data-lucide="${tool.icon}" class="w-7 h-7 primary-text mr-3 group-hover:scale-110 transition duration-200"></i>
                             <h3 class="text-2xl font-bold">${tool.name}</h3>
                         </div>
                         <div class="mb-4">
@@ -442,7 +747,7 @@
                         </div>
                         <p class="text-gray-600 dark:text-slate-400 mt-2 mb-4">${tool.description}</p>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm tool-pros-cons ${!toolDetailsVisible ? 'hidden' : ''}">
                             <!-- Pros Column -->
                             <div>
                                 <h4 class="font-bold text-green-600 dark:text-green-400 flex items-center mb-1">
@@ -471,14 +776,14 @@
                         <div class="flex flex-col space-y-3 w-full max-w-xs lg:max-w-none">
                             <button
                                 onclick="handleAffiliateClick('${tool.name}', '${tool.affiliateLink}')"
-                                class="w-full px-6 py-3 text-white font-extrabold rounded-full primary-bg primary-bg-hover shadow-xl transition duration-300 flex items-center justify-center text-base transform hover:scale-[1.03]"
+                                class="w-full px-6 py-3 text-white font-extrabold rounded-full primary-bg primary-bg-hover shadow-xl transition duration-300 flex items-center justify-center text-base transform hover:scale-[1.03] active:scale-95"
                             >
                                 <i data-lucide="dollar-sign" class="w-5 h-5 mr-2"></i>
                                 Claim Exclusive Deal
                             </button>
                             <button
                                 onclick="copyAffiliateLink('${tool.name}', '${tool.affiliateLink}')"
-                                class="w-full px-6 py-3 text-gray-700 dark:text-slate-200 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 font-semibold rounded-full shadow-md transition duration-300 flex items-center justify-center text-sm"
+                                class="w-full px-6 py-3 text-gray-700 dark:text-slate-200 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 font-semibold rounded-full shadow-md transition duration-300 flex items-center justify-center text-sm active:scale-95"
                             >
                                 <i data-lucide="share-2" class="w-4 h-4 mr-2"></i>
                                 Share Link
