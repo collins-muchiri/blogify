@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pro Marketer - Tech & Finance Reviews</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc; /* Slate 50 */
+            --card-bg: #ffffff;
+            --text-color: #1e293b; /* Slate 800 */
+            --primary-color: #0d9488; /* Teal 600 */
+            --secondary-color: #f59e0b; /* Amber 500 for rating/accents */
+        }
+        
+        .dark {
+            /* Dark Mode Overrides */
+            --bg-color: #1e293b; /* Slate 800 */
+            --card-bg: #334155; /* Slate 700 */
+            --text-color: #f1f5f9; /* Slate 100 */
+            --primary-color: #2dd4bf; /* Teal 400 */
+            --secondary-color: #fcd34d; /* Amber 300 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* General styles for themed elements */
+        .card {
+            background-color: var(--card-bg);
+            border-color: rgba(45, 212, 191, 0.2); /* Light teal border */
+        }
+
+        .primary-text {
+            color: var(--primary-color);
+        }
+
+        .primary-bg {
+            background-color: var(--primary-color);
+        }
+
+        .primary-bg-hover:hover {
+            background-color: var(--primary-color);
+            opacity: 0.9;
+        }
+
+        .scroll-progress-bar {
+            height: 4px;
+            background-color: var(--secondary-color);
+            width: 0%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            transition: width 0.1s linear;
+        }
+
+        /* Styling the Star Rating container */
+        .rating-star {
+            color: var(--secondary-color);
+            fill: var(--secondary-color);
+        }
+    </style>
+</head>
+<body class="antialiased" onscroll="updateScrollProgress()">
+
+    <!-- Scroll Progress Indicator (Tesla-Active Interactiveness) -->
+    <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+
+    <!-- Header & Navigation -->
+    <header class="bg-white dark:bg-slate-800 shadow-lg sticky top-[4px] z-10 border-b border-teal-300 dark:border-teal-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center">
+                <i data-lucide="zap" class="w-6 h-6 mr-2 text-yellow-500"></i>
+                The <span class="primary-text">Pro</span> Marketer
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#articles" class="text-gray-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition duration-150 font-medium">Reviews</a>
+                <a href="#tools" class="text-gray-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition duration-150 font-medium">SaaS Tools</a>
+                <a href="#amazon-picks" class="text-gray-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition duration-150 font-medium">Amazon Picks</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                 <!-- Dark Mode Toggle Button -->
+                <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 hover:ring-2 ring-teal-400 transition">
+                    <i data-lucide="sun" id="theme-icon" class="w-5 h-5"></i>
+                </button>
+                <button class="md:hidden text-gray-700 dark:text-slate-200" onclick="toggleMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-800 border-t border-teal-300 dark:border-teal-700">
+            <a href="#articles" class="block px-4 py-2 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700">Reviews</a>
+            <a href="#tools" class="block px-4 py-2 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700">SaaS Tools</a>
+            <a href="#amazon-picks" class="block px-4 py-2 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700">Amazon Picks</a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
+
+        <!-- Hero Section: Focused on the Value Proposition (Animated CTA) -->
+        <section class="text-center py-16 card rounded-xl shadow-2xl mb-16 border border-teal-400/50 dark:border-teal-700">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 text-gray-900 dark:text-white">
+                Unlock <span class="primary-text tracking-widest animate-pulse">TRUE</span> Passive Income
+            </h1>
+            <p class="text-xl text-gray-500 dark:text-slate-400 max-w-3xl mx-auto mb-8">
+                In-depth, unbiased reviews and comparisons of the highest-paying software, finance, and online education programs. **Stop guessing, start earning.**
+            </p>
+            <a href="#tools" class="inline-flex items-center px-8 py-3 border border-transparent text-lg font-medium rounded-full shadow-2xl text-white primary-bg primary-bg-hover transition duration-500 transform hover:scale-105 hover:ring-4 ring-yellow-400/50">
+                <i data-lucide="zap" class="w-5 h-5 mr-3"></i>
+                Review the Top High-Ticket Tools Now
+            </a>
+        </section>
+
+        <!-- Featured Articles Section -->
+        <section id="articles" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">Recent Reviews & Insights</h2>
+            <div id="article-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Articles will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Top Affiliate Tools Section (The Money Maker - SaaS) -->
+        <section id="tools" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b-2 border-teal-600/50 dark:border-teal-400/50 pb-2">The Essential SaaS Toolkit (Recurring Income)</h2>
+            <p class="text-lg text-gray-600 dark:text-slate-400 mb-8 max-w-4xl">
+                These software products are the foundation for long-term passive income streams.
+            </p>
+            <div id="tool-list" class="space-y-8">
+                <!-- SaaS Tools will be injected here by JavaScript -->
+            </div>
+        </section>
+        
+        <!-- NEW: Amazon Picks Section -->
+        <section id="amazon-picks" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b-2 border-yellow-600/50 dark:border-yellow-400/50 pb-2 flex items-center">
+                <i data-lucide="shopping-cart" class="w-7 h-7 text-yellow-500 mr-3"></i>
+                Pro-Grade Hardware & Literature (Amazon Picks)
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-slate-400 mb-8 max-w-4xl">
+                Invest in the high-quality physical tools and books that drive productivity and growth.
+            </p>
+            <div id="amazon-pick-list" class="space-y-8">
+                <!-- Amazon Products will be injected here by JavaScript -->
+            </div>
+        </section>
+
+
+        <!-- Simple Copy Confirmation Modal -->
+        <div id="copy-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-70 dark:bg-slate-900 dark:bg-opacity-70 hidden" onclick="hideModal()">
+            <div class="card p-8 rounded-xl shadow-2xl transform transition-all duration-300 scale-100 border border-teal-400/50" onclick="event.stopPropagation()">
+                <div class="flex items-center">
+                    <i data-lucide="check-circle" class="w-7 h-7 primary-text mr-3"></i>
+                    <p class="text-xl font-bold">Success!</p>
+                </div>
+                <p id="modal-message" class="text-base text-gray-600 dark:text-slate-400 mt-2">Affiliate Link Copied!</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-slate-900 text-white py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400">&copy; 2025 The Pro Marketer. All Rights Reserved.</p>
+            <p class="text-sm mt-2 text-yellow-300 font-medium">
+                Affiliate Disclosure: This site contains affiliate links. We may receive a commission for purchases made through these links at no extra cost to you.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Load icons and start rendering after the HTML is loaded
+        window.onload = function() {
+            lucide.createIcons();
+            applyInitialTheme();
+            renderArticles();
+            renderTools();
+            renderAmazonPicks();
+            // Start listening for scroll immediately
+            updateScrollProgress(); 
+        };
+
+        // --- THEME & INTERACTIVE FUNCTIONS ---
+
+        function applyInitialTheme() {
+            // Check for dark mode preference in localStorage or system setting
+            const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                               (localStorage.getItem('theme') === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'moon');
+            } else {
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            
+            if (isDark) {
+                localStorage.setItem('theme', 'dark');
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                localStorage.setItem('theme', 'light');
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        // Tesla-like Active Interactiveness: Scroll Progress Indicator
+        function updateScrollProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress-bar").style.width = scrolled + "%";
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Simulates clicking the affiliate link and shows a thank you message
+        function handleAffiliateClick(toolName, link) {
+            console.log(`Affiliate Clicked: ${toolName}. Redirecting to: ${link}`);
+
+            // In a real app, use: window.open(link, '_blank'); 
+
+            alertMessage(`Redirecting to ${toolName} site... Thank you for supporting us!`);
+        }
+
+        // Copies the raw affiliate link to the clipboard and shows a modal
+        function copyAffiliateLink(toolName, link) {
+            const tempInput = document.createElement('input');
+            tempInput.value = link;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            alertMessage(`'${toolName}' link copied to clipboard.`);
+        }
+
+        function showModal() {
+            const modal = document.getElementById('copy-modal');
+            modal.classList.remove('hidden');
+            setTimeout(hideModal, 2000);
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('copy-modal');
+            modal.classList.add('hidden');
+        }
+
+        function alertMessage(message) {
+            const modal = document.getElementById('copy-modal');
+            const modalMessage = document.getElementById('modal-message');
+
+            modalMessage.textContent = message;
+
+            modal.classList.remove('hidden');
+            setTimeout(hideModal, 2500);
+        }
+        
+        // Helper function for star ratings (Amazon flow)
+        function generateStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let starsHtml = '';
+
+            // Full stars
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += `<i data-lucide="star" class="w-4 h-4 rating-star fill-current"></i>`;
+            }
+            // Half star
+            if (hasHalfStar) {
+                starsHtml += `<i data-lucide="star-half" class="w-4 h-4 rating-star fill-current"></i>`;
+            }
+            // Empty stars to fill 5
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += `<i data-lucide="star" class="w-4 h-4 text-gray-300 dark:text-slate-500"></i>`;
+            }
+
+            return `<div class="flex items-center space-x-0.5">${starsHtml} <span class="text-sm font-semibold ml-1 primary-text">(${rating})</span></div>`;
+        }
+
+        // --- DUMMY DATA ---
+        const articles = [
+            {
+                id: 1,
+                title: "The Top 3 AI Writing Tools for Content Affiliates in 2026",
+                snippet: "We tested Jasper, Writesonic, and Copy.ai to see which one delivers the highest quality, SEO-optimized content to boost your organic traffic.",
+                category: "AI Software",
+                readTime: "7 min",
+                link: "#article-1",
+                icon: "sparkles",
+                rating: 4.8
+            },
+            {
+                id: 2,
+                title: "How to Choose the Best High-Yield Investment Platform",
+                snippet: "A detailed breakdown of brokerage fees, security features, and passive income options for serious investors. Stop paying high fees!",
+                category: "Finance",
+                readTime: "12 min",
+                link: "#article-2",
+                icon: "dollar-sign",
+                rating: 4.5
+            },
+            {
+                id: 3,
+                title: "Review: The Ultimate SEO Training Course for Beginners",
+                snippet: "Is this $500 course worth the price? We dive deep into the curriculum and community support to determine its real-world value.",
+                category: "Education",
+                readTime: "9 min",
+                link: "#article-3",
+                icon: "graduation-cap",
+                rating: 4.9
+            }
+        ];
+
+        const tools = [
+            {
+                id: 101,
+                name: "Ahrefs (SEO Software)",
+                description: "The gold standard for keyword research and competitive analysis. Essential for any affiliate site focusing on organic traffic.",
+                affiliateLink: "https://affiliatelink.com/ahrefs-pro",
+                icon: "bar-chart-3",
+                rating: 4.9,
+                pros: ["Unmatched Keyword Database", "Site Explorer (Backlinks)", "30% Lifetime Recurring value"],
+                cons: ["High initial cost", "Steep learning curve"]
+            },
+            {
+                id: 102,
+                name: "FreshBooks (Accounting Software)",
+                description: "Simplify your finances and expense tracking as a freelancer or small business owner. Great PPL payout for trials.",
+                affiliateLink: "https://affiliatelink.com/freshbooks-easy",
+                icon: "wallet",
+                rating: 4.5,
+                pros: ["Super simple interface", "Excellent mobile app", "Fast trial payouts available"],
+                cons: ["Lacks advanced inventory features", "Pricing scales quickly"]
+            },
+            {
+                id: 103,
+                name: "Kajabi (Online Course Platform)",
+                description: "Build, market, and sell your online courses, coaching, and memberships all in one place. High-ticket SaaS.",
+                affiliateLink: "https://affiliatelink.com/kajabi-course",
+                icon: "monitor",
+                rating: 4.8,
+                pros: ["All-in-one marketing automation", "High Average Order Value", "Sticky customer base"],
+                cons: ["No free plan/trial is short", "Customization limits"]
+            },
+        ];
+        
+        const amazonTools = [
+            {
+                id: 201,
+                name: "High-Resolution 4K Monitor (32-inch)",
+                description: "Essential hardware for deep work, financial modeling, or video editing. Drives high affiliate commissions due to price point.",
+                affiliateLink: "https://amazon.com/pro-monitor-link",
+                icon: "monitor",
+                rating: 4.7,
+                pros: ["Massive productivity boost", "Excellent color accuracy", "High value item"],
+                cons: ["Requires large desk space", "High shipping cost"]
+            },
+            {
+                id: 202,
+                name: "The 4-Hour Workweek by Tim Ferriss",
+                description: "The foundational book for anyone serious about affiliate marketing and passive income. An evergreen seller.",
+                affiliateLink: "https://amazon.com/4hww-book-link",
+                icon: "book-open",
+                rating: 4.9,
+                pros: ["Foundational productivity principles", "High conversion rate", "Low return rate"],
+                cons: ["Some advice is dated", "Requires action, not just reading"]
+            },
+            {
+                id: 203,
+                name: "Ergonomic Mechanical Keyboard",
+                description: "A comfortable, durable keyboard is crucial for content creators who spend hours typing. High perceived value item.",
+                affiliateLink: "https://amazon.com/mechanical-keyboard-link",
+                icon: "keyboard",
+                rating: 4.6,
+                pros: ["Reduces strain/injuries", "Highly customizable switches", "Superior typing speed"],
+                cons: ["Can be noisy", "Takes time to adjust to layout"]
+            },
+        ];
+
+
+        // --- RENDERING FUNCTIONS ---
+
+        function renderArticles() {
+            const container = document.getElementById('article-list');
+            container.innerHTML = articles.map(article => `
+                <article class="card p-6 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border hover:border-teal-600/50">
+                    <div class="flex items-center mb-3 justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider primary-text bg-teal-100 dark:bg-teal-900/50 px-2 py-0.5 rounded">${article.category}</span>
+                        ${generateStarRating(article.rating)}
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${article.title}</h3>
+                    <p class="text-gray-600 dark:text-slate-400 mb-4">${article.snippet}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <span class="dark:text-slate-400">${article.readTime} Read</span>
+                        <a href="${article.link}" class="primary-text font-medium hover:text-teal-400 flex items-center transition duration-150">
+                            View Article
+                            <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </a>
+                    </div>
+                </article>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderTools() {
+            const container = document.getElementById('tool-list');
+            container.innerHTML = tools.map(tool => `
+                <div class="card p-6 sm:p-8 rounded-xl shadow-2xl border border-teal-300/50 dark:border-teal-700 flex flex-col lg:flex-row items-start lg:items-center justify-between transition duration-500 hover:ring-4 ring-teal-400/50 transform hover:scale-[1.005]">
+                    
+                    <!-- Product Info & Comparison (Amazon-Style) -->
+                    <div class="lg:w-3/5 mb-6 lg:mb-0 lg:pr-8">
+                        <div class="flex items-center mb-2">
+                            <i data-lucide="${tool.icon}" class="w-7 h-7 primary-text mr-3"></i>
+                            <h3 class="text-2xl font-bold">${tool.name}</h3>
+                        </div>
+                        <div class="mb-4">
+                            ${generateStarRating(tool.rating)}
+                        </div>
+                        <p class="text-gray-600 dark:text-slate-400 mt-2 mb-4">${tool.description}</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                            <!-- Pros Column -->
+                            <div>
+                                <h4 class="font-bold text-green-600 dark:text-green-400 flex items-center mb-1">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4 mr-1"></i> PROS
+                                </h4>
+                                <ul class="space-y-1 list-none pl-0">
+                                    ${tool.pros.map(p => `<li class="flex items-start text-gray-700 dark:text-slate-300"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <!-- Cons Column -->
+                            <div>
+                                <h4 class="font-bold text-red-600 dark:text-red-400 flex items-center mb-1">
+                                    <i data-lucide="thumbs-down" class="w-4 h-4 mr-1"></i> CONS
+                                </h4>
+                                <ul class="space-y-1 list-none pl-0">
+                                    ${tool.cons.map(c => `<li class="flex items-start text-gray-700 dark:text-slate-300"><i data-lucide="x" class="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0"></i>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payout & Actions -->
+                    <div class="lg:w-2/5 flex flex-col items-start lg:items-end space-y-3 w-full border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-slate-600 pt-6 lg:pt-0 lg:pl-8">
+                        <p class="text-lg font-bold text-gray-700 dark:text-slate-300 bg-teal-100 dark:bg-teal-900/50 px-4 py-1 rounded-full shadow-md mb-3">Long-Term Value</p>
+                        
+                        <div class="flex flex-col space-y-3 w-full max-w-xs lg:max-w-none">
+                            <button
+                                onclick="handleAffiliateClick('${tool.name}', '${tool.affiliateLink}')"
+                                class="w-full px-6 py-3 text-white font-extrabold rounded-full primary-bg primary-bg-hover shadow-xl transition duration-300 flex items-center justify-center text-base transform hover:scale-[1.03]"
+                            >
+                                <i data-lucide="dollar-sign" class="w-5 h-5 mr-2"></i>
+                                Claim Exclusive Deal
+                            </button>
+                            <button
+                                onclick="copyAffiliateLink('${tool.name}', '${tool.affiliateLink}')"
+                                class="w-full px-6 py-3 text-gray-700 dark:text-slate-200 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 font-semibold rounded-full shadow-md transition duration-300 flex items-center justify-center text-sm"
+                            >
+                                <i data-lucide="share-2" class="w-4 h-4 mr-2"></i>
+                                Share Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // NEW: Amazon Picks Rendering Function
+        function renderAmazonPicks() {
+            const container = document.getElementById('amazon-pick-list');
+            container.innerHTML = amazonTools.map(tool => `
+                <div class="card p-6 sm:p-8 rounded-xl shadow-2xl border border-yellow-300/50 dark:border-yellow-700 flex flex-col lg:flex-row items-start lg:items-center justify-between transition duration-500 hover:ring-4 ring-yellow-400/50 transform hover:scale-[1.005]">
+                    
+                    <!-- Product Info & Comparison (Amazon-Style) -->
+                    <div class="lg:w-3/5 mb-6 lg:mb-0 lg:pr-8">
+                        <div class="flex items-center mb-2">
+                            <i data-lucide="${tool.icon}" class="w-7 h-7 text-yellow-500 mr-3"></i>
+                            <h3 class="text-2xl font-bold">${tool.name}</h3>
+                        </div>
+                        <div class="mb-4">
+                            ${generateStarRating(tool.rating)}
+                        </div>
+                        <p class="text-gray-600 dark:text-slate-400 mt-2 mb-4">${tool.description}</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                            <!-- Pros Column -->
+                            <div>
+                                <h4 class="font-bold text-green-600 dark:text-green-400 flex items-center mb-1">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4 mr-1"></i> PROS
+                                </h4>
+                                <ul class="space-y-1 list-none pl-0">
+                                    ${tool.pros.map(p => `<li class="flex items-start text-gray-700 dark:text-slate-300"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <!-- Cons Column -->
+                            <div>
+                                <h4 class="font-bold text-red-600 dark:text-red-400 flex items-center mb-1">
+                                    <i data-lucide="thumbs-down" class="w-4 h-4 mr-1"></i> CONS
+                                </h4>
+                                <ul class="space-y-1 list-none pl-0">
+                                    ${tool.cons.map(c => `<li class="flex items-start text-gray-700 dark:text-slate-300"><i data-lucide="x" class="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0"></i>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payout & Actions -->
+                    <div class="lg:w-2/5 flex flex-col items-start lg:items-end space-y-3 w-full border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-slate-600 pt-6 lg:pt-0 lg:pl-8">
+                        <p class="text-lg font-bold text-gray-700 dark:text-slate-300 bg-yellow-100 dark:bg-yellow-900/50 px-4 py-1 rounded-full shadow-md mb-3">Trusted Quality</p>
+                        
+                        <div class="flex flex-col space-y-3 w-full max-w-xs lg:max-w-none">
+                            <button
+                                onclick="handleAffiliateClick('${tool.name}', '${tool.affiliateLink}')"
+                                class="w-full px-6 py-3 text-white font-extrabold rounded-full bg-yellow-600 hover:bg-yellow-700 shadow-xl transition duration-300 flex items-center justify-center text-base transform hover:scale-[1.03]"
+                            >
+                                <i data-lucide="external-link" class="w-5 h-5 mr-2"></i>
+                                View on Amazon
+                            </button>
+                            <button
+                                onclick="copyAffiliateLink('${tool.name}', '${tool.affiliateLink}')"
+                                class="w-full px-6 py-3 text-gray-700 dark:text-slate-200 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 font-semibold rounded-full shadow-md transition duration-300 flex items-center justify-center text-sm"
+                            >
+                                <i data-lucide="copy" class="w-4 h-4 mr-2"></i>
+                                Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
