@@ -1,0 +1,9 @@
+.git
+.gitignore
+.github
+.qodo
+LICENSE
+README.md
+SECURITY.md
+*.md
+node_modules
