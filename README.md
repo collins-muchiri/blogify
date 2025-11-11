@@ -26,3 +26,4 @@ Open `Index.html` in your web browser to view the blog.
 ## License
 
 MIT
+# blogify
