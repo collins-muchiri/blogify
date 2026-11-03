@@ -4,13 +4,13 @@ Thank you for your interest in contributing! Here are some guidelines to help yo
 
 ## How to Contribute
 
-1. **Fork the repository** - Click the fork button on GitHub
-2. **Clone your fork** - `git clone <your-fork-url>`
-3. **Create a branch** - `git checkout -b feature/your-feature-name`
-4. **Make changes** - Edit files as needed
-5. **Commit changes** - `git commit -m "Add meaningful commit message"`
-6. **Push to your fork** - `git push origin feature/your-feature-name`
-7. **Create a Pull Request** - Submit a PR with a description of your changes
+1. **Fork the repository**: Click the fork button on GitHub
+2. **Clone your fork**: `git clone <your-fork-url>`
+3. **Create a branch**: `git checkout -b feature/your-feature-name`
+4. **Make changes**: Edit files as needed
+5. **Commit changes**: `git commit -m "Add meaningful commit message"`
+6. **Push to your fork**: `git push origin feature/your-feature-name`
+7. **Create a Pull Request**: Submit a PR with a description of your changes
 
 ## Code Style
 
